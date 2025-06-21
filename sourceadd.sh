@@ -2,6 +2,12 @@
 
 set -e
 
+if [ -v $1 ]; 
+then 
+echo "you must provide the name of a repository to add"
+exit 1
+fi
+
 sudo apt-get update
 sudo apt-get install ca-certificates curl
 sudo install -m 0755 -d /etc/apt/keyrings

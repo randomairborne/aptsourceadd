@@ -1,0 +1,27 @@
+name: Upload file
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish-debs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Install s3 CLI
+        run: sudo snap install aws-cli --classic
+
+      - name: Publish
+        run: aws s3 put sourceadd.sh s3://apt-repos/
+        env:
+          AWS_ENDPOINT_URL: https://${{ secrets.S3_ACCOUNT_ID }}.r2.cloudflarestorage.com/
+          AWS_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_KEY }}
